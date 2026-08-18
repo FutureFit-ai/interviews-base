@@ -1,0 +1,23 @@
+{
+  "name": "fullstack-interview-starter",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c blue,magenta \"npm run dev -w api\" \"npm run dev -w web\"",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "node scripts/migrate.mjs",
+    "test": "npm run test -w api && npm run test -w web",
+    "typecheck": "npm run typecheck -w api && npm run typecheck -w web",
+    "verify": "node scripts/verify.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
