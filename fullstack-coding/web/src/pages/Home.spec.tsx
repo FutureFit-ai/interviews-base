@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import App from "./App";
+import { Home } from "./Home";
 
 beforeEach(() => {
   vi.stubGlobal(
@@ -9,9 +9,9 @@ beforeEach(() => {
   );
 });
 
-describe("App", () => {
+describe("Home", () => {
   it("renders the starter page", async () => {
-    render(<App />);
+    render(<Home />);
     expect(await screen.findByText(/Interview Starter/)).toBeTruthy();
   });
 });
