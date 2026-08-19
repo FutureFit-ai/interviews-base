@@ -9,7 +9,7 @@ you at the start of the interview.
 
 ## Prerequisites
 
-- **Node.js**: 20.x or newer ([download](https://nodejs.org/))
+- **Node.js**: 24.x or newer ([download](https://nodejs.org/))
 - **npm**: 10.x or newer (comes with Node.js)
 - **Docker**: Docker Desktop or any compatible runtime (OrbStack, Colima, Podman) with
   `docker compose` support — used to run Postgres locally
