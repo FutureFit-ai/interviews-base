@@ -17,7 +17,7 @@ jobs:
   node-coding:
     # Both starters target Node 24 (see engines + README). Testing the single
     # documented version keeps CI honest about what we ask candidates to install.
-    name: node-coding
+    name: test / node-coding
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -36,7 +36,7 @@ jobs:
       - run: npm run build
 
   fullstack-coding:
-    name: fullstack-coding
+    name: test / fullstack-coding
     runs-on: ubuntu-latest
     defaults:
       run:
