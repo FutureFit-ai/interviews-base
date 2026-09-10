@@ -11,7 +11,7 @@ problem with you.
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js**: LTS version (20.x or higher recommended) ([Download here](https://nodejs.org/))
+- **Node.js**: 24.x or newer ([Download here](https://nodejs.org/))
 - **npm**: Version 10.x or higher (comes with Node.js)
 
 You can verify your installations by running:

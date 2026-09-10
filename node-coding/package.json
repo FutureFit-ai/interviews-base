@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Basic npm project with TypeScript and Jest for coding interviews",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "tsc",
     "test": "jest",
