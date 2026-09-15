@@ -1,0 +1,65 @@
+name: CI
+
+# Premerge gate for both interview starters. What matters for this repo is not
+# just "the tests pass" but "a candidate can clone this, follow the README, and
+# get to green" — so each job replays the documented setup path.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  node-coding:
+    # Both starters target Node 24 (see engines + README). Testing the single
+    # documented version keeps CI honest about what we ask candidates to install.
+    name: test / node-coding
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: node-coding
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: node-coding/package-lock.json
+      # npm ci (not install) so a lockfile that disagrees with package.json is
+      # a hard failure — the usual failure mode of a bot-authored bump.
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+  fullstack-coding:
+    name: test / fullstack-coding
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fullstack-coding
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: fullstack-coding/package-lock.json
+      # Use the real compose file rather than a `services:` block so CI and the
+      # candidate path can't drift, and so Postgres image bumps are covered too.
+      # --wait uses the healthcheck already defined in docker-compose.yml.
+      - run: docker compose up -d --wait
+      - run: npm ci
+      - run: npm run typecheck
+      # verify.mjs is the README's setup check: db reachable -> migrations
+      # apply -> API boots and sees the db -> tests pass.
+      - run: npm run verify
+      - name: Postgres logs
+        if: always()
+        run: docker compose logs db
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
