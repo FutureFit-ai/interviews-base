@@ -1,0 +1,28 @@
+name: Notify interview-drops
+
+# interview-drops (private) overlays its drops on the starters here and re-runs
+# verify. Tell it main moved so a dependency bump that breaks a drop is caught the
+# same hour it lands, not at an interview. This repo is public, so no drop content
+# lives here — only the name of the repo to notify.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'fullstack-coding/**'
+      - '.github/workflows/notify-interview-drops.yml'
+
+permissions: {}
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      # DROPS_DISPATCH_TOKEN: fine-grained PAT scoped to interview-drops, Contents: write.
+      - name: Send repository_dispatch
+        env:
+          GH_TOKEN: ${{ secrets.DROPS_DISPATCH_TOKEN }}
+        run: |
+          jq -n --arg sha "$GITHUB_SHA" \
+            '{event_type: "interviews-base-updated", client_payload: {sha: $sha}}' \
+            | gh api repos/FutureFit-ai/interview-drops/dispatches --input -
